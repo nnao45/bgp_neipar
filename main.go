@@ -41,6 +41,12 @@ func exists(filename string) bool {
 	return err == nil
 }
 
+func cat(filename string) string {
+	buff, err := ioutil.ReadFile(filename)
+	fatal(err)
+	return string(buff)
+}
+
 func addog(text string, filename string) {
 	var writer *bufio.Writer
 	text_data := []byte(text)
@@ -240,10 +246,11 @@ func showAll(flag int) {
 		fmt.Println("Pfx/Stat = -2 : Idle\n")
 		printNei(s)
 	}
-
-	fmt.Println("\n#########diff Now and Last show cmd###########\n")
-
-	sh.Command("colordiff", "-u", NOWDIFF, LASTDIFF).Run()
+	
+	if cat(NOWCONNECT) == cat (LASTCONNECT) {
+		fmt.Println("\n#########diff Now and Last show cmd###########\n")
+		sh.Command("colordiff", "-u", NOWDIFF, LASTDIFF).Run()
+	}
 
 	outC := make(chan string)
 	// copy the output in a separate goroutine so printing can't block indefinitely
