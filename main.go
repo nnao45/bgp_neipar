@@ -228,10 +228,10 @@ func showAll(flag int) {
 	os.Stdout = w
 
 	if flag == 0 {
+		sort.Sort(sort.Reverse(ByPfx{s}))
 		fmt.Println("\n######## Sort by Pfx or Status ##########\n")
 		fmt.Println("Pfx/Stat = -1 : Active")
 		fmt.Println("Pfx/Stat = -2 : Idle\n")
-		sort.Sort(sort.Reverse(ByPfx{s}))
 		printNei(s)
 	} else if flag == 1 {
 		sort.Sort(ByAS{s})
