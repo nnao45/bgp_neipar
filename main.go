@@ -250,6 +250,7 @@ func showAll(flag int) {
 	if cat(NOWCONNECT) == cat(LASTCONNECT) {
 		fmt.Println("\n#########diff Now and Last show cmd###########\n")
 		sh.Command("colordiff", "-u", NOWDIFF, LASTDIFF).Run()
+		fmt.Println("\n")
 	}
 
 	outC := make(chan string)
