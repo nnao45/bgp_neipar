@@ -265,7 +265,13 @@ func showAll(flag int) {
 	os.Stdout = old // restoring the real stdout
 	out := <-outC
 
-	fmt.Print(out)
+	//fmt.Print(out)
+        cmd := sh.Command("less","-R")
+        cmd.Stdin = strings.NewReader(out)
+        cmd.Stdout = os.Stdout
+        err := cmd.Run()
+                fatal(err)
+
 }
 
 var aflag bool
