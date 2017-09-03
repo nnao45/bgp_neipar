@@ -243,7 +243,7 @@ func showAll(flag int) {
 
 	fmt.Println("\n#########diff Now and Last show cmd###########\n")
 
-	sh.Command("diff", "-u", NOWDIFF, LASTDIFF).Run()
+	sh.Command("colordiff", "-u", NOWDIFF, LASTDIFF).Run()
 
 	outC := make(chan string)
 	// copy the output in a separate goroutine so printing can't block indefinitely
