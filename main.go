@@ -247,7 +247,7 @@ func showAll(flag int) {
 		printNei(s)
 	}
 	
-	if cat(NOWCONNECT) == cat (LASTCONNECT) {
+	if cat(NOWCONNECT) == cat(LASTCONNECT) {
 		fmt.Println("\n#########diff Now and Last show cmd###########\n")
 		sh.Command("colordiff", "-u", NOWDIFF, LASTDIFF).Run()
 	}
