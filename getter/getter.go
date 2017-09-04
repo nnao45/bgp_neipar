@@ -2,7 +2,6 @@ package getter
 
 import (
 	//	"bufio"
-
 	"fmt"
 
 	"github.com/golang/glog"
@@ -119,10 +118,10 @@ func Showgetter(outfile string) {
 		glog.Exitf("exp.ExpectBatch failed: %v , res: %v", err, res)
 	}
 	//        fmt.Println(term.Greenf("Res: %s", res[len(res)-1].Output))
-	if exists(LASTCONNECT) {
-		os.Rename(NOWCONNECT,LASTCONNECT)
+	if exists(NOWCONNECT) {
+		os.Rename(NOWCONNECT, LASTCONNECT)
 	}
-	address = strings.Trim(address,":23")
+	address = strings.Trim(address, ":23")
 	dog(address, NOWCONNECT)
 	dog(res[len(res)-1].Output, outfile)
 

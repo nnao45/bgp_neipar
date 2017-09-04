@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"sort"
@@ -19,6 +20,9 @@ import (
 )
 
 const (
+	NOWCONNECT  = "/usr/local/bgp_neipar/.nowconn.txt"
+	LASTCONNECT = "/usr/local/bgp_neipar/.lastconn.txt"
+
 	NEIPARDIR = "/usr/local/bgp_neipar/"
 	NOWLIST   = "/usr/local/bgp_neipar/raw.txt"
 
@@ -246,11 +250,12 @@ func showAll(flag int) {
 		fmt.Println("Pfx/Stat = -2 : Idle\n")
 		printNei(s)
 	}
-	
-	if cat(NOWCONNECT) == cat(LASTCONNECT) {
-		fmt.Println("\n#########diff Now and Last show cmd###########\n")
-		sh.Command("colordiff", "-u", NOWDIFF, LASTDIFF).Run()
-		fmt.Println("\n")
+	if exists(LASTCONNECT) {
+		if cat(NOWCONNECT) == cat(LASTCONNECT) {
+			fmt.Println("\n#########diff Now and Last show cmd###########\n")
+			sh.Command("colordiff", "-u", NOWDIFF, LASTDIFF).Run()
+			fmt.Println("\n")
+		}
 	}
 
 	outC := make(chan string)
@@ -267,11 +272,11 @@ func showAll(flag int) {
 	out := <-outC
 
 	//fmt.Print(out)
-        cmd := sh.Command("less","-R")
-        cmd.Stdin = strings.NewReader(out)
-        cmd.Stdout = os.Stdout
-        err := cmd.Run()
-                fatal(err)
+	cmd := sh.Command("less", "-R")
+	cmd.Stdin = strings.NewReader(out)
+	cmd.Stdout = os.Stdout
+	err := cmd.Run()
+	fatal(err)
 
 }
 
