@@ -263,11 +263,19 @@ func (b ByLastUP) Less(i, j int) bool {
 	return b.showNei[i].LastUP < b.showNei[j].LastUP
 }
 
+type ByDesc struct {
+	showNei
+}
+
+func (b ByDesc) Less(i, j int) bool {
+	return b.showNei[i].Desc < b.showNei[j].Desc
+}
+
 func printNei(s showNei) {
 	const format = "%v\t%v\t%v\t%v\t%v\t\n"
 	tw := new(tabwriter.Writer).Init(os.Stdout, 0, 8, 2, ' ', 0)
-	fmt.Fprintf(tw, format, "Peer", "AS", "LastUP", "Pfx/Stat", "Desc")
-	fmt.Fprintf(tw, format, "---------------", "------", "----------", "------", "-----------")
+	fmt.Fprintf(tw, format, "Peer", "AS", "LastUP", "Pfx/Stat", "Description")
+	fmt.Fprintf(tw, format, "---------------", "------", "----------", "------", "------------")
 	for _, t := range s {
 		fmt.Fprintf(tw, format, t.Peer, t.AS, t.LastUP, t.Pfx, t.Desc)
 	}
@@ -299,26 +307,33 @@ func showAll(flag int) {
 
 	if flag == 0 {
 		sort.Sort(sort.Reverse(ByPfx{s}))
-		fmt.Println("\n######## Sort by Pfx or Status ##########\n")
+		fmt.Println("\n################## Sort by Pfx or Status ##################\n")
 		fmt.Println("Pfx/Stat = -1 : Active")
 		fmt.Println("Pfx/Stat = -2 : Idle\n")
 		printNei(s)
 	} else if flag == 1 {
 		sort.Sort(ByAS{s})
-		fmt.Println("\n######## Sort by AS Number ##########\n")
+		fmt.Println("\n#################### Sort by AS Number ####################\n")
 		fmt.Println("Pfx/Stat = -1 : Active")
 		fmt.Println("Pfx/Stat = -2 : Idle\n")
 		printNei(s)
 	} else if flag == 2 {
 		sort.Sort(ByLastUP{s})
-		fmt.Println("\n######## Sort by Last UP/Down ##########\n")
+		fmt.Println("\n################### Sort by Last UP/Down ##################\n")
 		fmt.Println("Pfx/Stat = -1 : Active")
 		fmt.Println("Pfx/Stat = -2 : Idle\n")
 		printNei(s)
+	} else if flag == 3 {
+		sort.Sort(ByDesc{s})
+		fmt.Println("\n################### Sort by Description ###################\n")
+		fmt.Println("Pfx/Stat = -1 : Active")
+		fmt.Println("Pfx/Stat = -2 : Idle\n")
+		printNei(s)
+
 	}
 	if exists(LASTCONNECT) {
 		if cat(NOWCONNECT) == cat(LASTCONNECT) {
-			fmt.Println("\n#########diff Now and Last show cmd###########\n")
+			fmt.Println("\n################ diff Now and Last show cmd ###############\n")
 			sh.Command("colordiff", "-u", NOWDIFF, LASTDIFF).Run()
 			fmt.Println("\n")
 		}
@@ -349,11 +364,13 @@ func showAll(flag int) {
 var aflag bool
 var pflag bool
 var uflag bool
+var dflag bool
 
 func init() {
 	flag.BoolVar(&pflag, "p", false, "Sort Recieved-routes Number.")
 	flag.BoolVar(&aflag, "a", false, "Sort AS Number.")
 	flag.BoolVar(&uflag, "u", false, "Sort LastUP Neighbor.")
+	flag.BoolVar(&dflag, "d", false, "Sort Description.")
 }
 
 func main() {
@@ -378,5 +395,7 @@ func main() {
 		showAll(1)
 	} else if uflag {
 		showAll(2)
+	} else if dflag {
+		showAll(3)
 	}
 }
