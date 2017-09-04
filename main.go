@@ -1,13 +1,10 @@
 package main
 
 import (
-	"./getter"
-	"./peer"
 	"bufio"
 	"bytes"
 	"flag"
 	"fmt"
-	"github.com/codeskyblue/go-sh"
 	"io"
 	"io/ioutil"
 	"log"
@@ -18,6 +15,10 @@ import (
 	"strings"
 	"text/tabwriter"
 	"time"
+
+	"./getter"
+	"./peer"
+	"github.com/codeskyblue/go-sh"
 )
 
 const (
@@ -285,7 +286,7 @@ func printNei(s showNei) {
 func showAll(flag int) {
 	if exists(RESULTCSV) {
 		t := time.Now().Format("2006-01-02_030405")
-		LASTCSV := "result/result_" + t + ".csv"
+		LASTCSV := RESULTDIR + "/result_" + t + ".csv"
 		os.Rename(RESULTCSV, LASTCSV)
 	}
 	if exists(NOWDIFF) {
