@@ -299,13 +299,13 @@ func init() {
 
 func main() {
 	if !exists(NEIPARDIR) {
-		os.MkdirAll(NEIPARDIR, 0755)
+		os.MkdirAll(NEIPARDIR, 0777)
 	}
 	if !exists(DIFFDIR) {
-		os.MkdirAll(DIFFDIR, 0755)
+		os.MkdirAll(DIFFDIR, 0777)
 	}
 	if !exists(RESULTDIR) {
-		os.MkdirAll(RESULTDIR, 0755)
+		os.MkdirAll(RESULTDIR, 0777)
 	}
 	if len(os.Args) != 2 {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
