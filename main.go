@@ -1,22 +1,23 @@
 package main
 
 import (
+	"./getter"
+	"./peer"
 	"bufio"
 	"bytes"
 	"flag"
 	"fmt"
+	"github.com/codeskyblue/go-sh"
 	"io"
 	"io/ioutil"
 	"log"
 	"os"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
 	"text/tabwriter"
 	"time"
-
-	"./getter"
-	"github.com/codeskyblue/go-sh"
 )
 
 const (
@@ -98,18 +99,45 @@ type Neighbor struct {
 	AS     int
 	LastUP time.Duration
 	Pfx    int
+	Desc   string
 }
 
 type showNei []Neighbor
 
+func initialZero(num string) bool {
+	if numm, err := regexp.MatchString("^0", num); numm {
+		return true
+		if err != nil {
+			return false
+		}
+	}
+	return false
+}
+
 func timeconv(t string) time.Duration {
-	if strings.Contains(t, "h") {
+	if strings.Contains(t, "y") {
+		t_ary := strings.Split(t, "y")
+		t_years_int, err := strconv.Atoi(t_ary[0])
+		fatal(err)
+		t_ary[1] = strings.Trim(t_ary[1], "w")
+		if initialZero(t_ary[1]) && t_ary[1] != "0" {
+			t_ary[1] = strings.Trim(t_ary[1], "0")
+		}
+		t_weeks_int, err := strconv.Atoi(t_ary[1])
+		fatal(err)
+		t_weeks_int = t_weeks_int * 7 * 24
+		t_years_int = t_years_int * 365 * 24
+		t_int := (t_years_int + t_weeks_int)
+		t = strconv.Itoa(t_int) + "h"
+	} else if strings.Contains(t, "h") {
 		t_ary := strings.Split(t, "d")
 		t_days_int, err := strconv.Atoi(t_ary[0])
 		fatal(err)
 		t_days_int = t_days_int * 24
-		t_ary[1] = strings.Trim(t_ary[1], "0")
 		t_ary[1] = strings.Trim(t_ary[1], "h")
+		if initialZero(t_ary[1]) && t_ary[1] != "0" {
+			t_ary[1] = strings.Trim(t_ary[1], "0")
+		}
 		t_hour_int, err := strconv.Atoi(t_ary[1])
 		fatal(err)
 		t_int := t_days_int + t_hour_int
@@ -119,16 +147,48 @@ func timeconv(t string) time.Duration {
 		t_week_int, err := strconv.Atoi(t_ary[0])
 		fatal(err)
 		t_ary[1] = strings.Trim(t_ary[1], "d")
+		if initialZero(t_ary[1]) && t_ary[1] != "0" {
+			t_ary[1] = strings.Trim(t_ary[1], "0")
+		}
 		t_days_int, err := strconv.Atoi(t_ary[1])
 		fatal(err)
 		t_week_int = t_week_int * 7
 		t_int := (t_week_int + t_days_int) * 24
 		t = strconv.Itoa(t_int) + "h"
+
 	} else {
 		t = strings.Replace(t, ":", "h", 1)
 		t = strings.Replace(t, ":", "m", 1)
 		t = t + "s"
 	}
+	/*
+		if strings.Contains(t, "h") {
+			t_ary := strings.Split(t, "d")
+			t_days_int, err := strconv.Atoi(t_ary[0])
+			fatal(err)
+			t_days_int = t_days_int * 24
+			//t_ary[1] = strings.Trim(t_ary[1], "0")
+			t_ary[1] = strings.Trim(t_ary[1], "h")
+			t_hour_int, err := strconv.Atoi(t_ary[1])
+			fatal(err)
+			t_int := t_days_int + t_hour_int
+			t = strconv.Itoa(t_int) + "h"
+		} else if strings.Contains(t, "w") {
+			t_ary := strings.Split(t, "w")
+			t_week_int, err := strconv.Atoi(t_ary[0])
+			fatal(err)
+			t_ary[1] = strings.Trim(t_ary[1], "d")
+			t_days_int, err := strconv.Atoi(t_ary[1])
+			fatal(err)
+			t_week_int = t_week_int * 7
+			t_int := (t_week_int + t_days_int) * 24
+			t = strconv.Itoa(t_int) + "h"
+		} else {
+			t = strings.Replace(t, ":", "h", 1)
+			t = strings.Replace(t, ":", "m", 1)
+			t = t + "s"
+		}
+	*/
 	d, err := time.ParseDuration(t)
 	fatal(err)
 	return d
@@ -147,12 +207,12 @@ func makeTmp(f string) showNei {
 			s = strings.Replace(s, "  ", " ", -1)
 			s_ary := strings.Split(s, " ")
 
-			s_diff := s_ary[0] + " " + s_ary[2] + " " + s_ary[9] + "\n"
+			s_diff := s_ary[0] + " " + s_ary[2] + " " + s_ary[9] + " " + peer.Peer(s_ary[0]) + "\n"
 			addog(s_diff, NOWDIFF)
 			s_csv := s_ary[0] + "," + s_ary[2] + "," + s_ary[8] + "," + s_ary[9] + "\n"
 			addog(s_csv, RESULTCSV)
 
-			re_b, err := strconv.Atoi(s_ary[2])
+			as_i, err := strconv.Atoi(s_ary[2])
 			fatal(err)
 			if s_ary[9] == "Active" {
 				s_ary[9] = "-1"
@@ -160,10 +220,9 @@ func makeTmp(f string) showNei {
 			if s_ary[9] == "Idle" {
 				s_ary[9] = "-2"
 			}
-			re_d, err := strconv.Atoi(s_ary[9])
+			pfx_i, err := strconv.Atoi(s_ary[9])
 			fatal(err)
-
-			NeighborLine = append(NeighborLine, Neighbor{s_ary[0], re_b, timeconv(s_ary[8]), re_d})
+			NeighborLine = append(NeighborLine, Neighbor{s_ary[0], as_i, timeconv(s_ary[8]), pfx_i, peer.Peer(s_ary[0])})
 		}
 	}
 	if err := scanner.Err(); err != nil {
@@ -205,12 +264,12 @@ func (b ByLastUP) Less(i, j int) bool {
 }
 
 func printNei(s showNei) {
-	const format = "%v\t%v\t%v\t%v\t\n"
+	const format = "%v\t%v\t%v\t%v\t%v\t\n"
 	tw := new(tabwriter.Writer).Init(os.Stdout, 0, 8, 2, ' ', 0)
-	fmt.Fprintf(tw, format, "Peer", "AS", "LastUP", "Pfx/Stat")
-	fmt.Fprintf(tw, format, "---------------", "------", "----------", "------")
+	fmt.Fprintf(tw, format, "Peer", "AS", "LastUP", "Pfx/Stat", "Desc")
+	fmt.Fprintf(tw, format, "---------------", "------", "----------", "------", "-----------")
 	for _, t := range s {
-		fmt.Fprintf(tw, format, t.Peer, t.AS, t.LastUP, t.Pfx)
+		fmt.Fprintf(tw, format, t.Peer, t.AS, t.LastUP, t.Pfx, t.Desc)
 	}
 	tw.Flush() // calculate column widths and print table
 }
