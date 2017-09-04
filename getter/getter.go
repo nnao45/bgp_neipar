@@ -3,7 +3,6 @@ package getter
 import (
 	//	"bufio"
 	"fmt"
-
 	"github.com/golang/glog"
 	expect "github.com/google/goexpect"
 	"github.com/google/goterm/term"
@@ -21,12 +20,12 @@ import (
 )
 
 const (
-	NOWCONNECT  = "/usr/local/bgp_neipar/.nowconn.txt"
-	LASTCONNECT = "/usr/local/bgp_neipar/.lastconn.txt"
 	network     = "tcp"
 	timeout     = 10 * time.Second
 	command     = "show bgp ipv4 unicast summary"
-	outputfile  = "/usr/local/bgp_neipar/raw.txt"
+	NOWCONNECT  = "/usr/local/bgp_neipar/.nowconn.txt"
+	LASTCONNECT = "/usr/local/bgp_neipar/.lastconn.txt"
+	outfile     = "/usr/local/bgp_neipar/raw.txt"
 )
 
 func exists(filename string) bool {
@@ -36,7 +35,7 @@ func exists(filename string) bool {
 
 func dog(text string, filename string) {
 	text_data := []byte(text)
-	err := ioutil.WriteFile(filename, text_data, os.ModePerm)
+	err := ioutil.WriteFile(filename, text_data, 0755)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -61,7 +60,7 @@ func IsIP(ip string) bool {
 	return false
 }
 */
-func Showgetter(outfile string) {
+func Showgetter() {
 	//flag.Parse()
 
 	var address string
@@ -124,7 +123,6 @@ func Showgetter(outfile string) {
 	address = strings.Trim(address, ":23")
 	dog(address, NOWCONNECT)
 	dog(res[len(res)-1].Output, outfile)
-
 }
 
 func telnetSpawn(addr string, timeout time.Duration, opts ...expect.Option) (expect.Expecter, <-chan error, error) {

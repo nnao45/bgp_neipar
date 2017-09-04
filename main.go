@@ -20,11 +20,12 @@ import (
 )
 
 const (
+	NEIPARDIR = "/usr/local/bgp_neipar/"
+
 	NOWCONNECT  = "/usr/local/bgp_neipar/.nowconn.txt"
 	LASTCONNECT = "/usr/local/bgp_neipar/.lastconn.txt"
 
-	NEIPARDIR = "/usr/local/bgp_neipar/"
-	NOWLIST   = "/usr/local/bgp_neipar/raw.txt"
+	NOWLIST = "/usr/local/bgp_neipar/raw.txt"
 
 	DIFFDIR  = "/usr/local/bgp_neipar/diff/"
 	NOWDIFF  = "/usr/local/bgp_neipar/diff/diff.txt"
@@ -55,7 +56,7 @@ func addog(text string, filename string) {
 	var writer *bufio.Writer
 	text_data := []byte(text)
 
-	write_file, err := os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0600)
+	write_file, err := os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0755)
 	writer = bufio.NewWriter(write_file)
 	writer.Write(text_data)
 	writer.Flush()
@@ -223,7 +224,13 @@ func showAll(flag int) {
 	if exists(NOWDIFF) {
 		os.Rename(NOWDIFF, LASTDIFF)
 	}
-	getter.Showgetter(NOWLIST)
+	/*
+		if !exists(NOWLIST){
+			addog("test",NOWLIST)
+		}
+	*/
+
+	getter.Showgetter()
 
 	var s showNei = makeTmp(deleteLine(NOWLIST))
 
