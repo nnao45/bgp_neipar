@@ -66,7 +66,7 @@ func Showgetter() {
 	var address string
 	fmt.Println(term.Bluef("Getting %s", command))
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("router address: ")
+	fmt.Print("Login Router Address: ")
 	address, _ = reader.ReadString('\n')
 	address = strings.Trim(address, "\n")
 	//		if !IsIP(address) {
@@ -76,10 +76,10 @@ func Showgetter() {
 	//		break
 	//	}
 	address = address + `:23`
-	fmt.Print("username: ")
+	fmt.Print("Login Username: ")
 	username, _ := reader.ReadString('\n')
 	username = strings.Trim(username, "\n")
-	fmt.Print("password: ")
+	fmt.Print("Login Password: ")
 	PassWord, _ := terminal.ReadPassword(int(syscall.Stdin))
 	password := string(PassWord)
 	password = strings.Trim(password, "\n")
