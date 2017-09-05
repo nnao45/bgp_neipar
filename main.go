@@ -84,9 +84,11 @@ func deleteLine(filename string) string {
 			if !strings.Contains(s, "Neighbor") {
 				s = ""
 				b.WriteString(s)
+				continue
 			} else {
 				s = ""
 				x++
+				continue
 			}
 		}
 		s = s + "\n"
@@ -338,7 +340,7 @@ func showAll(flag int) {
 	if exists(LASTCONNECT) {
 		if cat(NOWCONNECT) == cat(LASTCONNECT) {
 			fmt.Println("\n################ diff Now and Last show cmd ###############\n")
-			sh.Command("colordiff", "-u", NOWDIFF, LASTDIFF).Run()
+			sh.Command("colordiff", "-u", LASTDIFF, NOWDIFF).Run()
 			fmt.Println("\n")
 		}
 	}
