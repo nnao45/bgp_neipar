@@ -126,7 +126,7 @@ func timeconv(t string) time.Duration {
 		t_years_int, err := strconv.Atoi(t_ary[0])
 		fatal(err)
 		t_ary[1] = strings.Trim(t_ary[1], "w")
-		if initialZero(t_ary[1]) && t_ary[1] != "0" {
+		if initialZero(t_ary[1]) && t_ary[1] != "0" && t_ary[1] != "00" {
 			t_ary[1] = strings.Trim(t_ary[1], "0")
 		}
 		t_weeks_int, err := strconv.Atoi(t_ary[1])
@@ -141,7 +141,7 @@ func timeconv(t string) time.Duration {
 		fatal(err)
 		t_days_int = t_days_int * 24
 		t_ary[1] = strings.Trim(t_ary[1], "h")
-		if initialZero(t_ary[1]) && t_ary[1] != "0" {
+		if initialZero(t_ary[1]) && t_ary[1] != "0" && t_ary[1] != "00" {
 			t_ary[1] = strings.Trim(t_ary[1], "0")
 		}
 		t_hour_int, err := strconv.Atoi(t_ary[1])
@@ -153,7 +153,7 @@ func timeconv(t string) time.Duration {
 		t_week_int, err := strconv.Atoi(t_ary[0])
 		fatal(err)
 		t_ary[1] = strings.Trim(t_ary[1], "d")
-		if initialZero(t_ary[1]) && t_ary[1] != "0" {
+		if initialZero(t_ary[1]) && t_ary[1] != "0" && t_ary[1] != "00" {
 			t_ary[1] = strings.Trim(t_ary[1], "0")
 		}
 		t_days_int, err := strconv.Atoi(t_ary[1])
@@ -167,34 +167,6 @@ func timeconv(t string) time.Duration {
 		t = strings.Replace(t, ":", "m", 1)
 		t = t + "s"
 	}
-	/*
-		if strings.Contains(t, "h") {
-			t_ary := strings.Split(t, "d")
-			t_days_int, err := strconv.Atoi(t_ary[0])
-			fatal(err)
-			t_days_int = t_days_int * 24
-			//t_ary[1] = strings.Trim(t_ary[1], "0")
-			t_ary[1] = strings.Trim(t_ary[1], "h")
-			t_hour_int, err := strconv.Atoi(t_ary[1])
-			fatal(err)
-			t_int := t_days_int + t_hour_int
-			t = strconv.Itoa(t_int) + "h"
-		} else if strings.Contains(t, "w") {
-			t_ary := strings.Split(t, "w")
-			t_week_int, err := strconv.Atoi(t_ary[0])
-			fatal(err)
-			t_ary[1] = strings.Trim(t_ary[1], "d")
-			t_days_int, err := strconv.Atoi(t_ary[1])
-			fatal(err)
-			t_week_int = t_week_int * 7
-			t_int := (t_week_int + t_days_int) * 24
-			t = strconv.Itoa(t_int) + "h"
-		} else {
-			t = strings.Replace(t, ":", "h", 1)
-			t = strings.Replace(t, ":", "m", 1)
-			t = t + "s"
-		}
-	*/
 	d, err := time.ParseDuration(t)
 	fatal(err)
 	return d
