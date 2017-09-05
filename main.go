@@ -255,7 +255,13 @@ func printNei(s showNei) {
 	fmt.Fprintf(tw, format, "Peer", "AS", "LastUP", "Pfx/Stat", "Description")
 	fmt.Fprintf(tw, format, "---------------", "------", "----------", "------", "------------")
 	for _, t := range s {
-		fmt.Fprintf(tw, format, t.Peer, t.AS, t.LastUP, t.Pfx, t.Desc)
+		if t.Pfx == -1 {
+			fmt.Fprintf(tw, format, t.Peer, t.AS, t.LastUP, "Active", t.Desc)
+		} else if t.Pfx == -2 {
+			fmt.Fprintf(tw, format, t.Peer, t.AS, t.LastUP, "Idle", t.Desc)
+		} else {
+			fmt.Fprintf(tw, format, t.Peer, t.AS, t.LastUP, t.Pfx, t.Desc)
+		}
 	}
 	tw.Flush() // calculate column widths and print table
 }
@@ -286,26 +292,18 @@ func showAll(flag int) {
 	if flag == 0 {
 		sort.Sort(sort.Reverse(ByPfx{s}))
 		fmt.Println("\n################## Sort by Pfx or Status ##################\n")
-		fmt.Println("Pfx/Stat = -1 : Active")
-		fmt.Println("Pfx/Stat = -2 : Idle\n")
 		printNei(s)
 	} else if flag == 1 {
 		sort.Sort(ByAS{s})
 		fmt.Println("\n#################### Sort by AS Number ####################\n")
-		fmt.Println("Pfx/Stat = -1 : Active")
-		fmt.Println("Pfx/Stat = -2 : Idle\n")
 		printNei(s)
 	} else if flag == 2 {
 		sort.Sort(ByLastUP{s})
 		fmt.Println("\n################### Sort by Last UP/Down ##################\n")
-		fmt.Println("Pfx/Stat = -1 : Active")
-		fmt.Println("Pfx/Stat = -2 : Idle\n")
 		printNei(s)
 	} else if flag == 3 {
 		sort.Sort(ByDesc{s})
 		fmt.Println("\n################### Sort by Description ###################\n")
-		fmt.Println("Pfx/Stat = -1 : Active")
-		fmt.Println("Pfx/Stat = -2 : Idle\n")
 		printNei(s)
 
 	}
