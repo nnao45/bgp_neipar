@@ -80,14 +80,17 @@ func deleteLine(filename string) string {
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		s := scanner.Text()
-		if x < 19 {
-			s = ""
-			b.WriteString(s)
-			x++
-		} else {
-			s = s + "\n"
-			b.WriteString(s)
+		if x == 0 {
+			if !strings.Contains(s, "Neighbor") {
+				s = ""
+				b.WriteString(s)
+			} else {
+				s = ""
+				x++
+			}
 		}
+		s = s + "\n"
+		b.WriteString(s)
 		if err := scanner.Err(); err != nil {
 			panic(err)
 		}
