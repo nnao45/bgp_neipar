@@ -47,7 +47,7 @@ Peer             AS      LastUP      Pfx/Stat  Description
 --- /usr/local/bgp_neipar/diff/lastdiff.txt     2017-09-08 21:47:53.272941246 +0900
 +++ /usr/local/bgp_neipar/diff/diff.txt 2017-09-08 21:50:21.029792034 +0900
 @@ -1,13 +1,13 @@
--10.0.1.1 65200 645352 IX-EX
+-10.0.1.1 65200 645218 IX-EX
 +10.0.1.1 65200 645352 IX-EX
  10.0.5.1 65024 30 IXB-user
 -10.0.8.1 65307 660839 Route-server 
