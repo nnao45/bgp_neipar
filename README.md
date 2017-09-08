@@ -3,13 +3,16 @@ This script is Parsing Router'OS "show bgp ipv4 unicast summary" Results.
 And sort, AS number, LastUP/Down, Pfx/Stat, and You Setting(peer/peer.go)discription.  
 
 ## Dependencies
-shell -> colordiff  
-go    -> github.com/codeskyblue/go-sh  
-         github.com/golang/glog  
-         github.com/google/goexpect  
-         github.com/google/goterm/term  
-         github.com/ziutek/telnet  
-         golang.org/x/crypto/ssh/terminal  
+shell:  
+colordiff  
+  
+go:  
+github.com/codeskyblue/go-sh  
+github.com/golang/glog  
+github.com/google/goexpect  
+github.com/google/goterm/term  
+github.com/ziutek/telnet  
+golang.org/x/crypto/ssh/terminal  
 
 ## Demo(sort by Pfx or Status)
 ```bash
