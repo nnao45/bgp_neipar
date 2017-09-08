@@ -1,6 +1,6 @@
 # bgp_neipar
 This script is Parsing IOS-XR "show bgp ipv4 unicast summary" Results.  
-And sort, AS number, LastUP/Down, Pfx/Stat, and You Setting(peer/peer.go)discription.  
+And sort, AS number, LastUP/Down, Pfx/Stat, and You Setting(peer/peer.go)description.  
 
 ## Dependencies
 shell:  
