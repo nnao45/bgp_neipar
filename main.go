@@ -249,6 +249,17 @@ func (b ByDesc) Less(i, j int) bool {
 	return b.showNei[i].Desc < b.showNei[j].Desc
 }
 
+func shortDur(d time.Duration) string {
+	s := d.String()
+	if strings.HasSuffix(s, "m0s") {
+		s = s[:len(s)-2]
+	}
+	if strings.HasSuffix(s, "h0m") {
+		s = s[:len(s)-2]
+	}
+	return s
+}
+
 func printNei(s showNei) {
 	const format = "%v\t%v\t%v\t%v\t%v\t\n"
 	tw := new(tabwriter.Writer).Init(os.Stdout, 0, 8, 2, ' ', 0)
@@ -256,11 +267,11 @@ func printNei(s showNei) {
 	fmt.Fprintf(tw, format, "---------------", "------", "----------", "------", "------------")
 	for _, t := range s {
 		if t.Pfx == -1 {
-			fmt.Fprintf(tw, format, t.Peer, t.AS, t.LastUP, "Active", t.Desc)
+			fmt.Fprintf(tw, format, t.Peer, t.AS, shortDur(t.LastUP), "Active", t.Desc)
 		} else if t.Pfx == -2 {
-			fmt.Fprintf(tw, format, t.Peer, t.AS, t.LastUP, "Idle", t.Desc)
+			fmt.Fprintf(tw, format, t.Peer, t.AS, shortDur(t.LastUP), "Idle", t.Desc)
 		} else {
-			fmt.Fprintf(tw, format, t.Peer, t.AS, t.LastUP, t.Pfx, t.Desc)
+			fmt.Fprintf(tw, format, t.Peer, t.AS, shortDur(t.LastUP), t.Pfx, t.Desc)
 		}
 	}
 	tw.Flush() // calculate column widths and print table
