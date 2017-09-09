@@ -26,21 +26,21 @@ Login Password:
 
 Peer             AS      LastUP      Pfx/Stat  Description   
 ---------------  ------  ----------  ------    ------------  
-10.0.1.1　　　　　 65200   240h0m0s    645352    IX-EX       
-10.0.2.1　　　　　 65100   6960h0m0s   638534    IXA-user 
-10.2.3.1　　　　　 65632   6120h0m0s   58345     IXB-user          
-10.0.4.1　　　　　 65401   240h0m0s    45353     IXB-user       
-10.2.5.1　　　　　 65224   240h0m0s    2352      IXB-user       
-10.0.6.1　　　　　 65302   3192h0m0s   1231      IXA-user  
-10.1.3.1　　　　　 65042   6120h0m0s   642       IXB-user          
-10.2.4.1　　　　　 65001   240h0m0s    133       IXB-user       
-10.0.5.1　　　　　 65424   240h0m0s    30        IXB-user       
-10.0.6.1　　　　　 65302   3192h0m0s   4         IXA-user          
+10.0.1.1　　　　　 65200   240h        645352    IX-EX       
+10.0.2.1　　　　　 65100   6960h       638534    IXA-user 
+10.2.3.1　　　　　 65632   6120h       58345     IXB-user          
+10.0.4.1　　　　　 65401   240h        45353     IXB-user       
+10.2.5.1　　　　　 65224   240h        2352      IXB-user       
+10.0.6.1　　　　　 65302   3192h       1231      IXA-user  
+10.1.3.1　　　　　 65042   6120h       642       IXB-user          
+10.2.4.1　　　　　 65001   240h        133       IXB-user       
+10.0.5.1　　　　　 65424   240h        30        IXB-user       
+10.0.6.1　　　　　 65302   3192h       4         IXA-user          
 10.4.7.1　　　　　 65003   0s          Active    IXB-user      
 10.0.8.1　　　　　 65307   0s          Idle      Route-server        
-10.3.9.1　　　　　 65007   5064h0m0s   Idle      IXA-user      
-10.1.1.1　　　　　 65009   6960h0m0s   Idle      IXA-user       
-10.1.2.1　　　　　 65010   6960h0m0s   Idle      IXA-user        
+10.3.9.1　　　　　 65007   5064h       Idle      IXA-user      
+10.1.1.1　　　　　 65009   6960h       Idle      IXA-user       
+10.1.2.1　　　　　 65010   6960h       Idle      IXA-user        
 
 ################ diff Now and Last show cmd ###############
 
